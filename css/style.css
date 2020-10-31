@@ -1,0 +1,82 @@
+#container-chat {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100vh;
+    background: #0b182b;
+    color: white;
+    border-radius: 20px 0 0 20px;
+    padding-left: 20px;
+}
+
+.chatView {
+    height: 90vh;
+    overflow-y: scroll;
+    color: white;
+    padding-right: 10px;
+}
+
+#chatForm {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 20px;
+    z-index: 9999999;
+    width: 100%;
+    display: float;
+}
+
+#message {
+    display: inline-block;
+    width: 87%;
+    margin-right: 20px;
+    border-radius: 20px;
+    background-color: #687d99;
+    color: white;
+    padding: 20px;
+    border: none;
+    margin-top: 10px;
+}
+
+#message::placeholder {
+    color: #a9a9a9;
+}
+
+#send {
+    position: fixed;
+    right: 20px;
+    bottom: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #0e59c7;
+    color: white;
+    border: none;
+    text-align: center;
+}
+
+.msgBox {
+    display: inline-block;
+    clear: both;
+    padding: 20px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.me {
+    float: right;
+    background: #0084ff;
+    color: #fff;
+}
+
+.others {
+    float: left;
+    background: #ff5050;
+    color: #fff;
+}
+
+.bubble_message {
+    margin-top: -15px;
+}

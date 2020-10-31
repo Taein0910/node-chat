@@ -16,7 +16,7 @@ var Message = mongoose.model('messages', {
     message: String
 });
 
-const uri = 'mongodb+srv://admin:admin123@cluster0-8bide.mongodb.net/ChatBotdb?retryWrites=true';
+const uri = 'mongodb+srv://dbuser:yti050910@cluster0.u2uiy.mongodb.net/ChatBotdb?retryWrites=true&w=majority';
 
 //const client = new MongoClient(uri, { useNewUrlParser: true });
 
@@ -69,7 +69,7 @@ app.get('/messages/:user', (req, res) => {
 })
 
 
-app.post('/messages', async (req, res) => {
+app.post('/messages', async(req, res) => {
     try {
         var message = new Message(req.body);
         console.log('Sending Message....', message);
@@ -83,12 +83,10 @@ app.post('/messages', async (req, res) => {
         else
             io.emit('message', req.body);
         res.sendStatus(200);
-    }
-    catch (error) {
+    } catch (error) {
         res.sendStatus(500);
         return console.log('error', error);
-    }
-    finally {
+    } finally {
         console.log('Message Posted')
     }
 
@@ -97,11 +95,11 @@ io.on('connection', () => {
     console.log('a user is connected')
 })
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
-    if (err) { console.log('Error while connecting', err) }
-    console.log('mongodb connected ');
-})
-// client.connect(err => {
-//     //const collection = client.db("ChatBotdb").collection("Message");
+        if (err) { console.log('Error while connecting', err) }
+        console.log('mongodb connected ');
+    })
+    // client.connect(err => {
+    //     //const collection = client.db("ChatBotdb").collection("Message");
 
 //     console.log('mongodb connected', err);
 // })
@@ -112,7 +110,6 @@ mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
 //     //client.close();
 // });
 
-var server = http.listen(3000, () => {
+var server = http.listen(8080, () => {
     console.log('server is running on port', server.address().port);
 });
-

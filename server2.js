@@ -15,7 +15,7 @@ var Message = mongoose.model('Message', {
 })
 
 //var dbUrl = 'mongodb://amkurian:amkurian1@ds257981.mlab.com:57981/simple-chat'
-var dbUrl = 'mongodb+srv://admin:admin123@cluster0-8bide.mongodb.net/ChatBotdb?retryWrites=false';
+var dbUrl = 'mongodb+srv://dbuser:yti050910@cluster0.u2uiy.mongodb.net/ChatBotdb?retryWrites=false&w=majority';
 
 app.get('/messages', (req, res) => {
     Message.find({}, (err, messages) => {
@@ -32,7 +32,7 @@ app.get('/messages/:user', (req, res) => {
 })
 
 
-app.post('/messages', async (req, res) => {
+app.post('/messages', async(req, res) => {
     try {
         var message = new Message(req.body);
 
@@ -45,12 +45,10 @@ app.post('/messages', async (req, res) => {
         else
             io.emit('message', req.body);
         res.sendStatus(200);
-    }
-    catch (error) {
+    } catch (error) {
         res.sendStatus(500);
         return console.log('error', error);
-    }
-    finally {
+    } finally {
         console.log('Message Posted')
     }
 

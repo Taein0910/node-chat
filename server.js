@@ -18,32 +18,6 @@ var Message = mongoose.model('messages', {
 
 const uri = 'mongodb+srv://dbuser:yti050910@cluster0.u2uiy.mongodb.net/ChatBotdb?retryWrites=true&w=majority';
 
-//const client = new MongoClient(uri, { useNewUrlParser: true });
-
-// MongoClient.connect(uri, { useNewUrlParser: true }, function (err, client) {
-//     //const collection = client.db("ChatBotdb").collection("Message");
-//     if (err) {
-//         console.log('Error occurred while connecting to MongoDB Atlas...\n', err);
-//     }
-//     console.log('Connected...');
-//     // const collection = client.db("ChatBotdb").collection("messages");
-//     // perform actions on the collection object
-//     //client.close();
-//     //console.log('mongodb connected', err);
-// })
-
-// var server = app.listen(3000, () => {
-//     console.log('server is running on port', server.address().port);
-// });
-//var dbUrl = 'mongodb://username:pass@ds257981.mlab.com:57981/simple-chat'
-//var dbUrl = 'mongodb+srv://admin:admin123@cluster0-8bide.mongodb.net/test?retryWrites=true'
-
-// mongoose.connect(dbUrl, (err) => {
-//     console.log('mongodb connected', err);
-// });
-
-//const uri = "mongodb+srv://admin:admin123@cluster0-8bide.mongodb.net/test?retryWrites=true";
-
 app.get('/messages', (req, res) => {
 
     try {

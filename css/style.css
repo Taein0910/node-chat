@@ -11,7 +11,7 @@
 }
 
 .chatView {
-    height: 90vh;
+    height: 80vh;
     overflow-y: scroll;
     color: white;
     padding-right: 10px;
@@ -60,7 +60,6 @@
     display: inline-block;
     clear: both;
     padding: 20px 10px;
-    border-radius: 20px;
     margin-bottom: 10px;
     font-family: Helvetica, Arial, sans-serif;
 }
@@ -69,14 +68,50 @@
     float: right;
     background: #0084ff;
     color: #fff;
+    border-radius: 20px 0 20px 20px;
 }
 
 .others {
     float: left;
     background: #ff5050;
     color: #fff;
+    border-radius: 0 20px 20px 20px;
+}
+
+.infoMessage {
+    margin-top:10px;
+    display: flex;
+    text-align: center;
+    width:100%;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    color:white;
+    display: inline-block;
+    margin-bottom: 10px;
+
 }
 
 .bubble_message {
     margin-top: -15px;
+}
+
+#player {
+    margin:20px;
+    width:65%;
+    height:600px;
+    border-radius:20px;
+    margin-top:30px;
+}
+
+.videoInfo {
+    margin-left:30px;
+}
+
+#videoTitle {
+    font-weight: bolder;
+}
+
+#videoChannel {
+    margin-top:-10px;
 }

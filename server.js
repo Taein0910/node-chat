@@ -16,6 +16,11 @@ var Message = mongoose.model('messages', {
     message: String
 });
 
+var Time = mongoose.model('time', {
+    name: String,
+    message: String
+});
+
 const uri = 'mongodb+srv://dbuser:yti050910@cluster0.u2uiy.mongodb.net/ChatBotdb?retryWrites=true&w=majority';
 
 app.get('/messages', (req, res) => {
@@ -65,6 +70,11 @@ app.post('/messages', async(req, res) => {
     }
 
 })
+
+
+
+
+
 io.on('connection', () => {
     console.log('a user is connected')
 })

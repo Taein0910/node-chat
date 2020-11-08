@@ -42,8 +42,17 @@
     <!-- 영상 공유받았을때 -->
     <div id="ex2" class="modal">
         <h2 style="margin-top:20px;">영상이 공유되었어요.</h2>
+        <h4 id="error"></h4>
 
+        <img id="thumnail" style="float:left; width:20%; margin-right: 20px;" src=""/>
+
+        <div style="margin-left:20px;">
         <h3 id="title"></h3>
+        <h5 id="description" style="margin-top:-10px;"></h5>
+    </div>
+        
+    <br>
+    <br>
         
         <a href="#ex1" rel="modal:close">
             <button class="ui primary button" onclick="playVideo(sharedId);">
@@ -59,16 +68,34 @@
     </div>
 
     <div class="container">
-        <p><a href="#ex1" rel="modal:open">닉네임 변경하기</a></p>
+        <header>
+            <p><a href="#ex1" class="ui button changeNameBtn" rel="modal:open">닉네임 변경하기</a></p>
 
-        <input id="urlInput" class="form-control" placeholder="url"><button id="send-url" class="send btn btn-success"><ion-icon name="send-outline" style="width:20px; height:20px;"></ion-icon></button></input>
+        <div class="ui input urlTextbox" style="width:85%;">
+            <input id="urlInput" class="form-control" placeholder="VideoId를 입력하세요(추후 검색 기능 구현)"><button id="send-url" class="send btn btn-success"><ion-icon name="send-outline" style="width:20px; height:20px;"></ion-icon></button></input>
+
+          </div>
+        </header>
+        
     <br>
         <div id="player"></div>
 
         <div class="videoInfo">
-        <h2 id="videoTitle">title</h2>
+        <h2 id="current_title">아직 공유된 영상이 없네요 :(</h2>
         <!--<h5 id="videoChannel">channel</h5>-->
-        <a onclick="toggleSound() ">mute</a>
+        <a onclick="toggleSound()">소리 켜기/끄기</a>
+<br><br>
+
+<div class="progress-wrap progress" data-progress-percent="0">
+      
+    <div class="progress-bar progress"></div>
+  </div>
+        
+
+  <div class="progress-wrap-other progress" data-progress-percent="0">
+      
+    <div class="progress-bar-other progress"></div>
+  </div>
 
     </div>
     </div>
@@ -89,97 +116,6 @@
 
     </div>
     </div>
-    <script>
-
-        var socket = io();
-        var username = $("#name").val();
-        var message = $("#message").val();
-
-        var sharedId;
-
-        
-        $("#name").val(localStorage.getItem('username'));
-
-
-        $(() => {
-            $("#send").click(() => {
-                var username = $("#name").val();
-                var message = $("#message").val();
-
-                if (!username && !message) {
-                    alert('메시지를 입력해주세요.');
-                } else if (!username && message) {
-                    alert('닉네임이 설정되어 있지 않습니다.');
-                } else if (username && !message) {
-                    alert('메시지를 입력해주세요.');
-                } else if (username && message) {
-                    console.log('Sending message from client');
-                    sendMessage({
-                        name: username,
-                        message: message
-                    });
-                }
-
-            })
-            getMessages()
-
-            $("#send-url").click(() => {
-                var key = "qr3dLL=bbqSfX--Q";
-                var username = $("#name").val();
-                var url = $("#urlInput").val();
-
-                if (!username && !url) {
-                    alert('URL을 입력해주세요.');
-                } else if (!username && url) {
-                    alert('닉네임이 설정되어 있지 않습니다.');
-                } else if (username && !url) {
-                    alert('URL을 입력해주세요.');
-                } else if (username && url) {
-                    console.log('Sending message from client');
-                    sendMessage({
-                        name: username,
-                        message: "[shareUrl,"+key+"]"+url
-                    });
-                }
-
-            })
-        })
-        socket.on('message', addMessages)
-
-
-        function addMessages(message) {
-            var username = $("#name").val();
-            var adpater = JSON.stringify(message).toString();
-            
-            if(adpater.indexOf('[shareUrl,qr3dLL=bbqSfX--Q]') != -1) {
-                var urlmsg = message.message.toString().replace("[shareUrl,qr3dLL=bbqSfX--Q]", "");
-                $("#messages").append(`<a href="#ex2" rel="modal:open"><div class="infoMessage"><h4 style="background-color: rgba(104, 125, 153, 0.5);padding:10px 15px;border-radius:20px;">${message.name}님이 영상을 공유했습니다<br>여기를 눌러 확인하세요 ></h4></div></a>`);
-                sharedId = urlmsg;
-            }
-            else if(message.name==username) {
-                $("#messages").append(`<div class="msgBox me"><h4 class="bubble_username"> ${message.name} </h4> <p class="bubble_message"> ${message.message} </p></div>`)
-
-            } else {
-                $("#messages").append(`<div class="msgBox others"><h4 class="bubble_username"> ${message.name} </h4> <p class="bubble_message"> ${message.message} </p></div>`)
-
-            }
-        }
-
-        function getMessages() {
-            $.get('http://localhost:8080/messages', (data) => {
-                data.forEach(addMessages);
-            })
-        }
-
-        function sendMessage(message) {
-            $.post('http://localhost:8080/messages', message)
-        }
-
-        function setUsername() {
-            localStorage.setItem('username', $("#name").val());
-            location.reload();
-        }
-    </script>
 </body>
 
 </html>

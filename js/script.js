@@ -4,7 +4,7 @@
  var message = $("#message").val();
 
  var sharedId;
-
+ var Youtubekey = "AIzaSyCRVbzOOPDS7zfXkz3hRcQ-wPT557m6yvI";
 
  $(() => {
     $("#name").val(localStorage.getItem('username'));
@@ -31,31 +31,30 @@
 
      })
      getMessages()
-
-     $("#send-url").click(() => {
-         var key = "qr3dLL=bbqSfX--Q";
-         var username = $("#name").val();
-         var url = $("#urlInput").val();
-
-         if (!username && !url) {
-             alert('URL을 입력해주세요.');
-         } else if (!username && url) {
-             alert('닉네임이 설정되어 있지 않습니다.');
-         } else if (username && !url) {
-             alert('URL을 입력해주세요.');
-         } else if (username && url) {
-             console.log('Sending message from client');
-             sendMessage({
-                 name: username,
-                 message: "[shareUrl,"+key+"]"+url
-             });
-         }
-
-         $("#urlInput").val('');
-
-     })
  })
  socket.on('message', addMessages)
+
+ function sendVideoId(id) {
+    var key = "qr3dLL=bbqSfX--Q";
+    var username = $("#name").val();
+
+    if (!username && !id) {
+        alert('URL을 입력해주세요.');
+    } else if (!username && id) {
+        alert('닉네임이 설정되어 있지 않습니다.');
+    } else if (username && !id) {
+        alert('URL을 입력해주세요.');
+    } else if (username && id) {
+        console.log('Sending message from client');
+        sendMessage({
+            name: username,
+            message: "[shareUrl,"+key+"]"+id
+        });
+    }
+
+    $("#urlInput").val('');
+
+   }
 
 
  function addMessages(message) {
@@ -145,14 +144,14 @@ function playVideo(id) {
 
 function getDataById(id) {
     videoId = id.toString();
+    console.log(sharedId, videoId);
 
     if(sharedId == videoId) {
-        var ytApiKey = "AIzaSyAEcxLMHrlz_Kkd2pPIMVd6kow01FFBE8E"; 
 
-$.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + ytApiKey, function(data) {
+$.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + Youtubekey, function(data) {
   var title = data.items[0].snippet.title;
   var description = data.items[0].snippet.description.substring(0, 115)+"...";
-  var thumnail = data.items[0].snippet.thumbnails.standard.url;
+  var thumnail = data.items[0].snippet.thumbnails.default.url;
   $("#error").html('');
 
   $("#title").html(title);
@@ -171,9 +170,8 @@ $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId 
 
 function getDataById_forPlay(id) {
     videoId = id.toString();
-    var ytApiKey = "AIzaSyAEcxLMHrlz_Kkd2pPIMVd6kow01FFBE8E"; 
 
-$.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + ytApiKey, function(data) {
+$.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + Youtubekey, function(data) {
   var title = data.items[0].snippet.title;
   $("#current_title").html(title);
 });
@@ -200,3 +198,64 @@ var getCurrentTime = setInterval(function() {
 
 
 
+const youTube_Search_URL ='https://www.googleapis.com/youtube/v3/search';
+
+function getList(searchTerm) {
+    $.getJSON(youTube_Search_URL, {
+        part: 'snippet',
+        key: Youtubekey,
+        regionCode: 'KR',
+        q: searchTerm,
+        maxResults: 10,
+    },
+  function (data) {
+      if(data.pageInfo.totalResults === 0) {
+          alert('No Results!');
+      }
+      displayResults(data.items);
+  }
+ );
+}
+
+function displayResults(videos) {
+    let html = "";
+    $.each(videos, function(index,video) {
+        console.log(video.snippet.title);
+        console.log(video.snippet.thumbnails.high.url);
+        
+        html = html +  
+        "<a href='#ex3' rel='modal:close' onclick='javascript:sendVideoId(\"" + video.id.videoId + "\")'><img class='search-result-thumnails' src='" + video.snippet.thumbnails.high.url + "'/>"+
+        "<p class ='line-clamp'>" +  video.snippet.title + "</p></a>";
+    });
+    $('.resultsBox ul').html(html);
+}
+function searchResults() {
+    var query = $('#urlInput').val();
+    if((query.indexOf('http://') != -1 || query.indexOf('https://') != -1) && query.indexOf('youtu') != -1) {
+        //유튜브 링크이면 id 추출해 공유
+        var id = youtube_parser(query);
+        $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + id + "&key=" + Youtubekey, function(data) {
+         var html = '<img id="thumnail" style="float:left; width:20%; margin-right: 20px;" src="'+data.items[0].snippet.thumbnails.default.url+'"/><div style="margin-left:20px;"> <h3 id="title">'+data.items[0].snippet.title+'</h3> <h5 id="description" style="margin-top:-10px;">'+ data.items[0].snippet.description.substring(0, 115)+'...</h5> <a href="#ex3" rel="modal:close"><button class="ui primary button" onclick="javascript:sendVideoId(\''+id+'\');">공유</button></a> <a href="#ex3" rel="modal:close"><button class="ui button">닫기</button></a>';
+         $('.resultsBox ul').html(html);
+        });
+     
+    } else { //아니면 검색결과 팝업
+        getList(query);
+    }
+
+
+}
+
+function youtube_parser(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
+
+function handleSearch() {
+    getList();
+    displayResults();
+    searchResults();
+}
+
+$(handleSearch);

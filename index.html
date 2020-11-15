@@ -67,12 +67,34 @@
         <br><br>
     </div>
 
+
+    <!-- 검색 -->
+    <div id="ex3" class="modal"><form action="#" class="js-search-form">
+        <h2 style="margin-top:20px;">공유할 영상을 찾아보세요.</h2>
+
+        
+          </form>
+          <div class="resultsBox">
+            <ul>
+            </ul>
+          </div>
+    </div>
+
+
+
+
+
     <div class="container">
         <header>
             <p><a href="#ex1" class="ui button changeNameBtn" rel="modal:open">닉네임 변경하기</a></p>
 
-        <div class="ui input urlTextbox" style="width:85%;">
-            <input id="urlInput" class="form-control" placeholder="VideoId를 입력하세요(추후 검색 기능 구현)"><button id="send-url" class="send btn btn-success"><ion-icon name="send-outline" style="width:20px; height:20px;"></ion-icon></button></input>
+
+            <div class="ui input urlTextbox" style="width:85%;">
+                <input type="text" id="urlInput" name="text-field" class="searchResults" placeholder="검색어나 URL을 입력하세요.">
+                <a href="#ex3" onclick="searchResults()" class="ui button send btn btn-success" rel="modal:open" id="send-url">
+                    <ion-icon name="send-outline" style="width:20px; height:20px;"></ion-icon></a>
+           
+            </div>
 
           </div>
         </header>

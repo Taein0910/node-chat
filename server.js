@@ -16,10 +16,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
 
+app.get('/',function(req,res){
+    res.render('index.html')
+ });
+
 
 var count = 0;
 var rooms = [];
 var Message;
+var VideoList;
 
 app.get('/room', function(req, res) {
     roomName = req.query.roomname;
@@ -29,7 +34,10 @@ app.get('/room', function(req, res) {
         name: String,
         message: String
     });
-    res.render('index', { room: roomName });
+    VideoList = mongoose.model(roomName + '/videolist', {
+        id: String
+    });
+    res.render('room.html', { room: roomName });
 });
 
 
@@ -37,8 +45,6 @@ app.get('/room', function(req, res) {
 const uri = 'mongodb+srv://dbuser:yti050910@cluster0.u2uiy.mongodb.net/ChatBotdb?retryWrites=true&w=majority';
 
 app.get('/messages', (req, res) => {
-
-
     try {
         Message.find({}, (err, messages) => {
             if (err) {
@@ -86,8 +92,42 @@ app.post('/messages', async(req, res) => {
 })
 
 
+app.get('/videolists', (req, res) => {
+    try {
+        VideoList.find({}, (err, ids) => {
+            if (err) {
+                console.log('error', err);
+            }
+            console.log('getting All message....', ids);
+            res.send(ids);
+        })
+    } catch (error) {
+        res.sendStatus(500);
+        return console.log('error', error);
+    }
+})
 
+app.post('/videolists', async(req, res) => {
+    try {
+        var id = new VideoList(req.body);
+        console.log('adding id on videolist....', id);
 
+        var savedMessage = await id.save()
+
+        var censored = await VideoList.findOne({ id: 'badword' });
+        if (censored)
+            await VideoList.remove({ _id: censored.id })
+        else
+            io.to(roomName).emit('id', req.body);
+        res.sendStatus(200);
+    } catch (error) {
+        res.sendStatus(500);
+        return console.log('error', error);
+    } finally {
+        console.log('videoList Posted')
+    }
+
+})
 
 io.on('connection', function(socket) {
     console.log('socket.io connected');

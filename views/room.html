@@ -20,24 +20,6 @@
 </head>
 
 <body>
-    <!-- 닉네임 설정 팝업 -->
-    <div id="ex1" class="modal">
-        <h2 style="margin-top:20px;">닉네임 설정</h2>
-        <div class="ui input">
-            <input id="name" class="form-control" type="text" placeholder="닉네임을 입력해주세요">
-        </div><br><br>
-        <a href="#ex1" rel="modal:close">
-            <button class="ui primary button" onclick="javascript:setUsername();">
-            저장
-          </button>
-        </a>
-        <a href="#ex1" rel="modal:close">
-            <button class="ui button">
-            닫기
-          </button>
-        </a>
-        <br><br>
-    </div>
 
     <!-- 영상 공유받았을때 -->
     <div id="ex2" class="modal">
@@ -55,7 +37,7 @@
         <br>
 
         <a href="#ex1" rel="modal:close">
-            <button class="ui primary button" onclick="playVideo(sharedId);">
+            <button class="ui primary button" onclick="playVideo(selectedId);">
             재생
           </button>
         </a>
@@ -87,10 +69,9 @@
 
     <div class="container">
         <header>
-            <p><a href="#ex1" class="ui button changeNameBtn" rel="modal:open">닉네임 변경하기</a></p>
 
 
-            <div class="ui input urlTextbox" style="width:85%;">
+            <div class="ui input urlTextbox" style="width:100%;">
                 <input type="text" id="urlInput" name="text-field" class="searchResults" placeholder="검색어나 URL을 입력하세요.">
                 <a href="#ex3" onclick="searchResults()" class="ui button send btn btn-success" rel="modal:open" id="send-url">
                     <ion-icon name="send-outline" style="width:20px; height:20px;"></ion-icon>
@@ -104,30 +85,31 @@
     <br>
     <div id="player"></div>
 
-    <div class="videoInfo">
-        <h2 id="current_title">아직 공유된 영상이 없네요 :(</h2>
-        <!--<h5 id="videoChannel">channel</h5>-->
-        <a onclick="toggleSound()">소리 켜기/끄기</a>
-        <br><br>
-
-        <div class="progress-wrap progress" data-progress-percent="0">
-
-            <div class="progress-bar progress"></div>
-        </div>
-
-
-        <div class="progress-wrap-other progress" data-progress-percent="0">
-
-            <div class="progress-bar-other progress"></div>
-        </div>
-
     </div>
+
+    <div class="bottom_nav">
+        <h3 id="current_title">영상을 재생해보세요</h3>
+        <a id="toggleSound_mute" onclick="toggleSound()"><ion-icon name="volume-mute-outline" style="color:#000;"></ion-icon></a>
+        <a id="toggleSound_unmute" onclick="toggleSound()"><ion-icon name="volume-high-outline" style="color:#000;"></ion-icon></a>
+
+        <a id="exitroom" onclick="exitroom()"><ion-icon name="exit-outline" style="color:#fff;"></ion-icon></a>
+
     </div>
 
     <div id="container-chat">
 
+        <a class="tab" href="javascript:$('.chat').show();$('.videolist').hide();$('.settings').hide();">
+            <ion-icon name="chatbubbles-outline" style="font-size:30px; color:#fff;"></ion-icon>
+        </a>
+        <a class="tab" href="javascript:$('.chat').hide();$('.videolist').show();$('.settings').hide();">
+            <ion-icon name="list-outline" style="font-size:30px; color:#fff;"></ion-icon>
+        </a>
+        <a class="tab" href="javascript:$('.chat').hide();$('.videolist').hide();$('.settings').show();">
+            <ion-icon name="settings-outline" style="font-size:30px; color:#fff;"></ion-icon>
+        </a>
+
+        <div class="chat">
         <div class="chatForm">
-            <h1 class="display-4" style="margin-top:40px;">채팅</h1>
             <br>
             <div id="messages" class="chatView"></div>
             <div id="chatForm">
@@ -137,9 +119,40 @@
             </div>
         </div>
 
+        <div class="chatForm">
+            <br>
+            <div id="messages" class="chatView"></div>
+            <div id="chatForm">
+                <input id="message" class="form-control" placeholder="메시지를 입력하세요."><button id="send" class="send btn btn-success"><ion-icon name="send-outline" style="width:20px; height:20px;"></ion-icon></button></input>
+                <br>
+
+            </div>
+        </div>
+        </div>
+
+        <div class="videolist">
+            <br>
+            videolist
+        </div>
+
+        <div class="settings">
+            <br>
+            <h2 style="margin-top:20px;">닉네임 설정</h2>
+        <div class="ui input">
+            <input id="name" class="form-control" type="text" placeholder="닉네임을 입력해주세요">
+        </div><br><br>
+        <a href="#ex1" rel="modal:close">
+            <button class="ui primary button" onclick="javascript:setUsername();">
+            저장
+          </button>
+        </a>
+        </div>
+
 
     </div>
     </div>
+
+    
 </body>
 
 </html>

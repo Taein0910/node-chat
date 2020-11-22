@@ -2,8 +2,14 @@ var socket = io();
 var username = $("#name").val();
 var message = $("#message").val();
 
-// url 에서 parameter 추출
+var videolist=[];
 
+$(document).ready(function(){
+    $(".videolist").hide();
+    $(".settings").hide();
+});
+
+// url 에서 parameter 추출
 function getParam(sname) {
     var params = location.search.substr(location.search.indexOf("?") + 1);
     var sval = "";
@@ -15,11 +21,10 @@ function getParam(sname) {
     return sval;
 }
 
-
 socket.emit('joinroom', { room: getParam("roomname") });
 
 
-var sharedId;
+var selectedId;
 var Youtubekey = "AIzaSyAEcxLMHrlz_Kkd2pPIMVd6kow01FFBE8E";
 
 //var Youtubekey = "AIzaSyCRVbzOOPDS7zfXkz3hRcQ-wPT557m6yvI";
@@ -82,7 +87,9 @@ function addMessages(message) {
     if (adpater.indexOf('[shareUrl,qr3dLL=bbqSfX--Q]') != -1) {
         var urlmsg = message.message.toString().replace("[shareUrl,qr3dLL=bbqSfX--Q]", "");
         $("#messages").append(`<a href="#ex2" onclick="javascript:getDataById('` + urlmsg + `');" rel="modal:open"><div class="infoMessage"><h4 style="background-color: rgba(104, 125, 153, 0.5);padding:10px 15px;border-radius:20px;">${message.name}님이 영상을 공유했습니다<br>여기를 눌러 확인하세요 ></h4></div></a>`);
-        sharedId = urlmsg;
+        videolist.unshift(urlmsg);
+        refreshList();
+        
 
     } else if (message.name == username) {
         $("#messages").append(`<div class="msgBox me"><h4 class="bubble_username"> ${message.name} </h4> <p class="bubble_message"> ${message.message} </p></div>`)
@@ -96,6 +103,11 @@ function addMessages(message) {
 
 
 
+}
+
+function refreshList() {
+        $(".videolist").html(videolist.join());
+    
 }
 
 
@@ -150,7 +162,17 @@ function onPlayerReady(a) {
 }
 
 function toggleSound() {
-    player.isMuted() ? player.unMute() : player.mute()
+    if(player.isMuted()) {
+        player.unMute();
+        $('#toggleSound_mute').show();
+        $('#toggleSound_unmute').hide();
+       
+        
+    } else {
+        player.mute();
+         $('#toggleSound_mute').hide();
+        $('#toggleSound_unmute').show();
+    } 
 }
 
 
@@ -161,9 +183,9 @@ function playVideo(id) {
 
 function getDataById(id) {
     videoId = id.toString();
-    console.log(sharedId, videoId);
+    selectedId = videoId;
+    console.log(selectedId, videoId);
 
-    if (sharedId == videoId) {
 
         $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + Youtubekey, function(data) {
             var title = data.items[0].snippet.title;
@@ -175,13 +197,6 @@ function getDataById(id) {
             $("#description").html(description);
             $("#thumnail").attr("src", thumnail);
         });
-    } else {
-        $("#error").html('만료된 공유입니다. 최근 공유 영상을 재생하려면 아래 버튼을 누르세요.');
-
-        $("#title").html('');
-        $("#description").html('');
-        $("#thumnail").attr("src", '');
-    }
 
 }
 
@@ -253,6 +268,7 @@ function searchResults() {
         //유튜브 링크이면 id 추출해 공유
         var id = youtube_parser(query);
         $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + id + "&key=" + Youtubekey, function(data) {
+            if(data.includes(''))
             var html = '<img id="thumnail" style="float:left; width:20%; margin-right: 20px;" src="' + data.items[0].snippet.thumbnails.default.url + '"/><div style="margin-left:20px;"> <h3 id="title">' + data.items[0].snippet.title + '</h3> <h5 id="description" style="margin-top:-10px;">' + data.items[0].snippet.description.substring(0, 115) + '...</h5> <a href="#ex3" rel="modal:close"><button class="ui primary button" onclick="javascript:sendVideoId(\'' + id + '\');">공유</button></a> <a href="#ex3" rel="modal:close"><button class="ui button">닫기</button></a>';
             $('.resultsBox ul').html(html);
         });
@@ -268,4 +284,8 @@ function youtube_parser(url) {
     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = url.match(regExp);
     return (match && match[7].length == 11) ? match[7] : false;
+}
+
+function exitroom() { 
+    location.href='/';
 }

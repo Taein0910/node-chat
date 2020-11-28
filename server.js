@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
 
-app.get('/',function(req,res){
+app.get('/', function(req, res) {
     res.render('index.html')
- });
+});
 
 
 var count = 0;
@@ -39,8 +39,6 @@ app.get('/room', function(req, res) {
     });
     res.render('room.html', { room: roomName });
 });
-
-
 
 const uri = 'mongodb+srv://dbuser:yti050910@cluster0.u2uiy.mongodb.net/ChatBotdb?retryWrites=true&w=majority';
 

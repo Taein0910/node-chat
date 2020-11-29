@@ -34,7 +34,7 @@ html::-webkit-scrollbar {
 #container-chat {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 70%;
     width: 30%;
     height: 100vh;
     background: #0b182b;
@@ -129,12 +129,29 @@ html::-webkit-scrollbar {
 }
 
 #player {
+    display: none;
     margin: 20px;
     width: 65%;
     height: 600px;
     border-radius: 20px;
     margin-top: 30px;
     box-shadow: 10px 10px 15px #c3c3c3, -5px -5px 0px #fff;
+}
+
+#player-none {
+    padding-top: 15%;
+    font-size: 20px;
+    text-align: center;
+    align-items: center;
+    -webkit-box-align: center;
+    background-color: #000;
+    margin: 20px;
+    width: 65%;
+    height: 600px;
+    border-radius: 20px;
+    margin-top: 70px;
+    box-shadow: 10px 10px 15px #c3c3c3, -5px -5px 0px #fff;
+    color: white;
 }
 
 .videoInfo {
@@ -197,7 +214,16 @@ header {
 .urlTextbox {
     float: left;
     display: inline-block;
-    width: 80vw;
+    width: 100%;
+}
+
+#urlInput {
+    border-radius: 10px 0 0 10px;
+    background-color: #9cadc4;
+}
+
+#urlInput::placeholder {
+    color: rgb(88, 88, 88);
 }
 
 #send-url {
@@ -254,6 +280,10 @@ header {
     width: 80%;
 }
 
+#chatToggle {
+    display: none;
+}
+
 #toggleSound_mute {
     width: 45px;
     height: 45px;
@@ -269,7 +299,7 @@ header {
     height: 45px;
     padding: 10px;
     display: inline-block;
-    background-color: rgb(84, 47, 250);
+    background-color: white;
     border-radius: 50%;
     margin-right: 10px;
 }
@@ -285,7 +315,14 @@ header {
 
 .tab {
     display: inline-block;
-    width: 30.3%;
+    width: 40%;
     margin-top: 20px;
-    text-align: center;
+    text-align: left;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.tab:hover {
+    color: white;
 }

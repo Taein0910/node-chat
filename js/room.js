@@ -159,8 +159,7 @@ function addMessages(message) {
 
     }
 
-    $('#messages').scrollTop($('.chatForm')[0].scrollHeight);
-
+    $('.chatView').scrollTop($('.chatForm')[0].scrollHeight + 100);
 
 
 }
@@ -235,6 +234,16 @@ function toggleSound() {
 function playVideo(id) {
     player.loadVideoById(id);
     getDataById_forPlay(id);
+    $("#player-none").hide();
+    $("#player").show();
+
+    toastr.warning('유튜브 정책으로 인해 최초 재생 시 음소거 될 수 있습니다. 하단바의 버튼을 눌러 음소거를 해제해주세요.');
+    var mql = window.matchMedia("screen and (max-width: 768px)");
+    if (mql.matches) {
+        $("#container-chat").hide(500);
+        $('.chatView').scrollTop($('.chatForm')[0].scrollHeight + 100);
+    }
+
 }
 
 function getDataById(id) {
@@ -398,3 +407,15 @@ function copy(val) {
     });
 
 })(window, jQuery);
+
+function chatToggle() {
+    if ($("#container-chat").css("display") == "none") {
+        $("#container-chat").show(500);
+        $('.chatView').scrollTop($('.chatForm')[0].scrollHeight + 100);
+    } else {
+        $("#container-chat").hide(500);
+        $('.chatView').scrollTop($('.chatForm')[0].scrollHeight + 100);
+    }
+
+
+}

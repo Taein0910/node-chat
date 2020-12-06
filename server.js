@@ -2,8 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
 var http = require('http').Server(app);
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io')(http);
 var mongoose = require('mongoose');
 var roomName;
 

@@ -1,5 +1,4 @@
-var socketURL = 'https://shareu.netlify.app' // whatever your socket port
-var socket = io(socketURL);
+var socket = io('/');
 var username = $("#name").val();
 var message = $("#message").val();
 

@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
-var server = app.listen(8080);
+var server = http.createServer(app);
 var http = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var mongoose = require('mongoose');
@@ -9,7 +9,7 @@ var roomName;
 
 const MongoClient = require('mongodb').MongoClient;
 
-app.use(express.static(__dirname));
+app.use(express.static('views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

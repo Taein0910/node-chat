@@ -1,4 +1,4 @@
-var socket = io('/');
+var socket = io('/', { transports: ['websocket'], upgrade: false });
 var username = $("#name").val();
 var message = $("#message").val();
 

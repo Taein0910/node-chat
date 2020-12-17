@@ -1,4 +1,5 @@
-var socket = io();
+var socketURL = 'https://shareu.netlify.app' // whatever your socket port
+var socket = io(socketURL);
 var username = $("#name").val();
 var message = $("#message").val();
 
@@ -171,13 +172,13 @@ function refreshList() {
 
 
 function getMessages() {
-    $.get('http://localhost:8080/messages', (data) => {
+    $.get('https://shareu.netlify.app/messages', (data) => {
         data.forEach(addMessages);
     })
 }
 
 function sendMessage(message) {
-    $.post('http://localhost:8080/messages', message)
+    $.post('https://shareu.netlify.app/messages', message)
 }
 
 function setUsername() {

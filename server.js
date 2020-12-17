@@ -1,8 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
+var server = app.listen(8080);
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io').listen(server);
 var mongoose = require('mongoose');
 var roomName;
 
